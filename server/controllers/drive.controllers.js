@@ -27,7 +27,7 @@ export const driveCallback = async (req, res, next) => {
     .cookie("auth_token", authToken, {
       httpOnly: true,
     })
-    .redirect(`http://localhost:5173/`);
+    .redirect(`http://localhost:5173/video-uploading?driveLinked=true`);
 };
 
 export const driveUpload = async (req, res, next) => {
