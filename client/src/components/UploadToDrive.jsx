@@ -10,7 +10,7 @@ function UploadToDrive() {
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  console.log(pathname.search);
+  // console.log(pathname.search);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(pathname.search);
@@ -29,6 +29,8 @@ function UploadToDrive() {
   }, [pathname.search]);
 
   const uploadToDrive = async (savedTitle, savedContent) => {
+    console.log(savedContent);
+    console.log(savedTitle);
     try {
       setLoading(true);
       const res = await fetch(
