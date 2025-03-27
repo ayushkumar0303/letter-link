@@ -44,6 +44,10 @@ app.use("/server/auth", authRouter);
 app.use("/server/letter", letterRouter);
 app.use("/server/drive", driveRouter);
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const message = error.message || "Internal Server Error";
@@ -51,8 +55,4 @@ app.use((error, req, res, next) => {
     status: statusCode,
     message,
   });
-});
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
