@@ -18,4 +18,73 @@ export const saveDraft = async (req, res, next) => {
   }
 };
 
-export const uploadLetter = async (req, res, next) => {};
+export const getLetters = async (req, res) => {
+  const { userId } = req.params;
+
+  console.log(userId);
+  // console.log(req.user.id);
+
+  if (req.user.id !== req.params.userId) {
+    return res.status(403).json("You are not allowed to get the letters");
+  }
+  // console.log(userId);
+  try {
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.sort === "asc" ? 1 : -1;
+    // console.log(startIndex);
+    // console.log(limit);
+    // console.log(sortDirection);
+
+    const letters = await Letter.find({
+      ...(req.params.userId && { userId: req.params.userId }),
+      ...(req.query.letterId && { _id: req.query.letterId }),
+    })
+      .sort({ updatedAt: sortDirection })
+      .skip(startIndex)
+      .limit(limit);
+
+    // console.log(letters);
+    res.status(200).json({
+      letters,
+    });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+export const deleteLetter = async (req, res) => {
+  if (req.user.id !== req.params.userId) {
+    return res.status(403).json("You are not allowed to delete this post");
+  }
+
+  try {
+    await Letter.findByIdAndDelete(req.params.letterId);
+    return res.status(200).json("The Letter is deleted");
+  } catch (error) {
+    return res.status(403).json(error.message);
+  }
+};
+
+export const updateLetter = async (req, res) => {
+  if (req.user.id !== req.params.userId) {
+    return res.status(403).json("You are not allowed to update this letter");
+  }
+  try {
+    const updatedLetter = await Letter.findByIdAndUpdate(
+      req.params.letterId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+        },
+      },
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Draft updated successfully", updatedLetter });
+  } catch (error) {
+    return res.status(403).json(error.message);
+  }
+};

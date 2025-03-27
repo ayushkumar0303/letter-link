@@ -55,3 +55,10 @@ export const google = async (req, res) => {
     return res.status(500).json(error.message);
   }
 };
+
+export const userSignOut = async (req, res) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+  });
+  return res.status(200).json("Successfully signed out");
+};

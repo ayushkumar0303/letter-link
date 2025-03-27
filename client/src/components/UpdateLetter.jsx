@@ -3,9 +3,9 @@ import { Alert, Button, TextInput, Card, Spinner } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
-function QuillEditor() {
+function UpdateLetter() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [successMessage, setSuccessMessage] = useState("");
@@ -14,23 +14,40 @@ function QuillEditor() {
   const [formSubmissionError, setFormSubmissionError] = useState(null);
   const [editorContent, setEditorContent] = useState("");
   const [title, setTitle] = useState("");
-  // const pathname = useLocation();
+  const [letterLoading, setLetterLoading] = useState(false);
+  const pathname = useLocation();
 
-  // useEffect(() => {
-  //   const urlParams = new URLSearchParams(pathname.search);
-  //   const driveLinked = urlParams.get("driveLinked");
+  const [error, setError] = useState("");
 
-  //   if (driveLinked === "true") {
-  //     const savedTitle = localStorage.getItem("draftTitle");
-  //     const savedContent = localStorage.getItem("draftContent");
+  const { letterId } = useParams();
+  console.log(letterId);
 
-  //     if (savedTitle && savedContent) {
-  //       uploadToDrive(savedTitle, savedContent);
-  //       localStorage.removeItem("draftTitle");
-  //       localStorage.removeItem("draftContent");
-  //     }
-  //   }
-  // }, []);
+  useEffect(() => {
+    try {
+      const fetchLetter = async () => {
+        setLetterLoading(true);
+        const res = await fetch(
+          `/server/letter/get-letters/${currentUser._id}/?letterId=${letterId}`
+        );
+        const data = await res.json();
+        console.log(data.letters);
+
+        if (res.ok) {
+          setFormSubmissionError(null);
+          setTitle(data.letters[0].title);
+          setEditorContent(data.letters[0].content);
+        } else {
+          setFormSubmissionError(data);
+        }
+        setLetterLoading(false);
+        // console.log(formData);
+      };
+
+      fetchLetter();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [letterId]);
 
   // const uploadToDrive = async (savedTitle, savedContent) => {
   //   try {
@@ -64,12 +81,12 @@ function QuillEditor() {
       setFormSubmissionError("Please login first for this action.");
     } else {
       try {
-        if (actionType === "draft") {
+        if (actionType === "update-draft") {
           setDraftUploading(true);
           const res = await fetch(
-            `/server/letter/save-draft/${currentUser?._id}`,
+            `/server/letter/update-letter/${currentUser?._id}/?letterId=${letterId}`,
             {
-              method: "POST",
+              method: "PUT",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ content: editorContent, title }),
             }
@@ -99,7 +116,7 @@ function QuillEditor() {
     <div className="flex justify-center items-center bg-gray-100 min-h-screen p-4">
       <Card className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-center text-2xl font-semibold text-green-400">
-          Create Letter
+          Update Letter
         </h1>
         <form className="flex flex-col gap-3 mt-2">
           <TextInput
@@ -119,7 +136,7 @@ function QuillEditor() {
               type="button"
               pill
               color="light"
-              onClick={(e) => handleFormData(e, "draft")}
+              onClick={(e) => handleFormData(e, "update-draft")}
               disabled={draftUploading | driveUploading}
               size="xs"
             >
@@ -160,4 +177,4 @@ function QuillEditor() {
   );
 }
 
-export default QuillEditor;
+export default UpdateLetter;

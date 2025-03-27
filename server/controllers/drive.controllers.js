@@ -27,7 +27,53 @@ export const driveCallback = async (req, res, next) => {
     .cookie("auth_token", authToken, {
       httpOnly: true,
     })
-    .redirect(`http://localhost:5173/video-uploading?driveLinked=true`);
+    .redirect(
+      `http://localhost:5173/dashboard/uploading-letter/?driveLinked=true`
+    );
+};
+
+export const getDriveLetters = async (req, res, next) => {
+  const folderName = "Letters";
+  const limit = parseInt(req.query.limit) || 9; // Default limit
+  const startIndex = parseInt(req.query.startIndex) || 0;
+
+  try {
+    const authToken = req.cookies.auth_token;
+
+    if (!authToken) {
+      return res.status(401).json("Unauthorised User");
+    }
+
+    jwt.verify(authToken, process.env.SECRET_KEY, (err, token) => {
+      if (err) {
+        return next(err);
+      }
+      req.token = token;
+    });
+
+    oauth2Client.setCredentials(req.token);
+
+    const drive = google.drive({ version: "v3", auth: oauth2Client });
+    const folderResponse = await drive.files.list({
+      q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`, // Fetch only Google Docs
+      fields: "files(id)",
+    });
+
+    // console.log(folderResponse);
+
+    const FileResponse = await drive.files.list({
+      q: `'${folderResponse.data.files[0].id}' in parents and mimeType='application/vnd.openxmlformats-officedocument.wordprocessingml.document'`,
+      fields: "files(id, name, webViewLink, modifiedTime)",
+      pageSize: limit + startIndex,
+    });
+
+    const files = FileResponse.data.files.slice(startIndex, limit + startIndex);
+    res.status(200).json({
+      letters: files,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const driveUpload = async (req, res, next) => {

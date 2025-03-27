@@ -52,10 +52,10 @@ function OAuth() {
     <Button
       className="cursor-pointer"
       type="button"
-      color="purple"
+      color="light"
       onClick={handleOAuth}
+      size="xs"
     >
-      <AiFillGoogleCircle className="w-6 h-6 mr-2" />
       Login
     </Button>
   );
