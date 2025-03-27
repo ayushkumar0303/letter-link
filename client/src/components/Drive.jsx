@@ -35,7 +35,7 @@ function Drive() {
     };
 
     getLettersFromDrive();
-  }, []);
+  }, [currentUser?._id]);
 
   const handleSeeMore = async () => {
     const startIndex = userLetters.length;
