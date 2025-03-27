@@ -150,7 +150,7 @@ function Drafts() {
                   colSpan="7"
                   className="text-center text-gray-500 py-4"
                 >
-                  No letters for Review
+                  No Drafts
                 </Table.Cell>
               </Table.Row>
             )}

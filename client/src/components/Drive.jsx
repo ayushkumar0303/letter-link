@@ -104,7 +104,7 @@ function Drive() {
                   colSpan="7"
                   className="text-center text-gray-500 py-4"
                 >
-                  No letters for Review
+                  No letters in Drive
                 </Table.Cell>
               </Table.Row>
             )}
