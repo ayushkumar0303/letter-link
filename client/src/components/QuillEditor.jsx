@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { Alert, Button, TextInput, Card, Spinner } from "flowbite-react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { setDraft } from "../store/store";
 
 function QuillEditor() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [successMessage, setSuccessMessage] = useState("");
   const [draftUploading, setDraftUploading] = useState(false);
   const [driveUploading, setDriveUploading] = useState(false);
@@ -82,8 +85,7 @@ function QuillEditor() {
             setFormSubmissionError(data.message);
           }
         } else if (actionType === "upload") {
-          localStorage.setItem("draftTitle", title);
-          localStorage.setItem("draftContent", editorContent);
+          dispatch(setDraft({ title, content: editorContent }));
           window.location.href = `/server/drive/connect/${currentUser?._id}`;
         }
       } catch (error) {

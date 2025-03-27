@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Button, Spinner } from "flowbite-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
+import { clearDraft } from "../store/store";
 
 function UploadToDrive() {
   const pathname = useLocation();
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
+  const { title, content } = useSelector((state) => state.draft);
   const navigate = useNavigate();
   // console.log(pathname.search);
 
@@ -18,19 +21,12 @@ function UploadToDrive() {
     console.log(driveLinked);
 
     if (driveLinked === "true") {
-      const savedTitle = localStorage.getItem("draftTitle");
-      const savedContent = localStorage.getItem("draftContent");
-
-      console.log(savedContent);
-      console.log(savedTitle);
-
-      if (savedTitle && savedContent) {
-        uploadToDrive(savedTitle, savedContent);
-        localStorage.removeItem("draftTitle");
-        localStorage.removeItem("draftContent");
+      if (title && content) {
+        uploadToDrive(content, title);
+        dispatch(clearDraft());
       }
     }
-  }, [pathname.search]);
+  }, [currentUser?._id]);
 
   const uploadToDrive = async (savedTitle, savedContent) => {
     console.log(savedContent);

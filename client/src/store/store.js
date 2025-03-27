@@ -8,6 +8,21 @@ const USER_INITIAL_STATE = {
   loading: false,
 };
 
+const draftSlice = createSlice({
+  name: "draft",
+  initialState: { title: "", content: "" },
+  reducers: {
+    setDraft: (state, action) => {
+      state.title = action.payload.title;
+      state.content = action.payload.content;
+    },
+    clearDraft: (state) => {
+      state.title = "";
+      state.content = "";
+    },
+  },
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState: USER_INITIAL_STATE,
@@ -37,6 +52,7 @@ export const userSlice = createSlice({
 
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  draft: draftSlice.reducer,
 });
 
 const persistConfig = {
@@ -55,4 +71,6 @@ export const store = configureStore({
 
 export const { signOutSuccess, signInError, signInStart, signInSuccess } =
   userSlice.actions;
+
+export const { setDraft, clearDraft } = draftSlice.actions;
 export const persistor = persistStore(store);
