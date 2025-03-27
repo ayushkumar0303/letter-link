@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { signInError, signInSuccess } from "../store/store";
 
-function OAuth() {
+function OAuth({ btnSize, btnColor, btnText }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -52,11 +52,11 @@ function OAuth() {
     <Button
       className="cursor-pointer"
       type="button"
-      color="light"
+      color={btnColor}
       onClick={handleOAuth}
-      size="xs"
+      size={btnSize}
     >
-      Login
+      {btnText}
     </Button>
   );
 }

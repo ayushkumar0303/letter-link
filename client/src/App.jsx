@@ -5,13 +5,13 @@ import Footer from "./components/FooterComp";
 
 function App() {
   return (
-    <>
+    <div className="min-w-96">
       <Header />
       <div className="min-h-screen">
         <Outlet />
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 

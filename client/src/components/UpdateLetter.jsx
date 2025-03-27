@@ -20,7 +20,7 @@ function UpdateLetter() {
   const [error, setError] = useState("");
 
   const { letterId } = useParams();
-  console.log(letterId);
+  // console.log(letterId);
 
   useEffect(() => {
     try {
@@ -30,7 +30,7 @@ function UpdateLetter() {
           `/server/letter/get-letters/${currentUser._id}/?letterId=${letterId}`
         );
         const data = await res.json();
-        console.log(data.letters);
+        // console.log(data.letters);
 
         if (res.ok) {
           setFormSubmissionError(null);
@@ -105,7 +105,7 @@ function UpdateLetter() {
         }
       } catch (error) {
         setFormSubmissionError(error.message);
-        console.log(error);
+        // console.log(error);
       } finally {
         setDraftUploading(false);
       }

@@ -44,7 +44,7 @@ function Drafts() {
 
   const handleSeeMore = async () => {
     const startIndex = userLetters.length;
-    console.log(startIndex);
+    // console.log(startIndex);
     try {
       const res = await fetch(
         `/server/letter/get-letters/${currentUser._id}?startIndex=${startIndex}`

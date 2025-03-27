@@ -14,12 +14,12 @@ function Drive() {
       try {
         setLoading(true);
 
-        console.log("drive");
+        // console.log("drive");
         const res = await fetch(
           `/server/drive/get-letters/${currentUser?._id}`
         );
         const data = await res.json();
-        console.log(data.letters);
+        // console.log(data.letters);
         if (res.ok) {
           setUserLetters(data.letters);
           // console.log(data.letters.length);
@@ -39,7 +39,7 @@ function Drive() {
 
   const handleSeeMore = async () => {
     const startIndex = userLetters.length;
-    console.log(startIndex);
+    // console.log(startIndex);
     try {
       const res = await fetch(
         `/server/drive/get-letters/${currentUser._id}?startIndex=${startIndex}`

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import FeatureCard from "../components/FeatureCard";
 import { useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
+import { Button } from "flowbite-react";
 
 const Home = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -19,16 +21,12 @@ const Home = () => {
         <div className="mt-6 flex gap-4 justify-center">
           {currentUser?._id ? (
             <Link to="/dashboard/?tab=create-letter">
-              <button className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg shadow-md hover:bg-green-600 transition">
+              <Button color="dark" size="lg">
                 Create Letter
-              </button>
+              </Button>
             </Link>
           ) : (
-            <Link to="/signin">
-              <button className="px-6 py-3 border border-green-500 text-green-500 font-medium rounded-lg shadow-md hover:bg-blue-100 dark:hover:bg-gray-800 transition">
-                Sign In
-              </button>
-            </Link>
+            <OAuth btnSize="lg" btnText="Sign In" btnColor="dark" />
           )}
         </div>
       </div>

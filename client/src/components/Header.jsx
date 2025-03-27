@@ -79,7 +79,7 @@ function Header() {
             </Dropdown.Item>
           </Dropdown>
         ) : (
-          <OAuth />
+          <OAuth btnSize="xs" btnText="Login" btnColor="gray" />
         )}
       </div>
     </Navbar>

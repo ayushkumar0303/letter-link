@@ -88,7 +88,7 @@ function QuillEditor() {
         }
       } catch (error) {
         setFormSubmissionError(error.message);
-        console.log(error);
+        // console.log(error);
       } finally {
         setDraftUploading(false);
       }

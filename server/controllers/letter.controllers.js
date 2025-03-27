@@ -21,7 +21,7 @@ export const saveDraft = async (req, res, next) => {
 export const getLetters = async (req, res) => {
   const { userId } = req.params;
 
-  console.log(userId);
+  // console.log(userId);
   // console.log(req.user.id);
 
   if (req.user.id !== req.params.userId) {
