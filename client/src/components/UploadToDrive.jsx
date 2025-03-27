@@ -10,6 +10,7 @@ function UploadToDrive() {
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  console.log(pathname.search);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(pathname.search);
@@ -25,7 +26,7 @@ function UploadToDrive() {
         localStorage.removeItem("draftContent");
       }
     }
-  }, []);
+  }, [pathname.search]);
 
   const uploadToDrive = async (savedTitle, savedContent) => {
     try {
