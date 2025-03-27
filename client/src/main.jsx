@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard.jsx";
 import PrivateDash from "./components/PrivateDash.jsx";
 import UpdatePost from "./components/UpdateLetter.jsx";
 import UploadToDrive from "./components/UploadToDrive.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             element: <UploadToDrive />,
           },
         ],
+      },
+      {
+        path: "/*",
+        element: <NotFound />,
       },
     ],
   },
