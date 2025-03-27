@@ -7,7 +7,7 @@ import letterRouter from "./routes/letter.routes.js";
 import driveRouter from "./routes/drive.routes.js";
 // import cors from "cors";
 
-// import path from "path";
+import path from "path";
 
 const app = express();
 
@@ -22,7 +22,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// const __dirname = path.resolve();
+const __dirname = path.resolve();
 
 // console.log(process.env);
 
@@ -35,7 +35,7 @@ mongoose
     console.log(err);
   });
 
-// app.use(express.static(path.join(__dirname, "/client/dist")));
+app.use(express.static(path.join(__dirname, "/client/dist")));
 app.listen(3000, (req, res) => {
   console.log("Server is running on port 3000");
 });
@@ -53,6 +53,6 @@ app.use((error, req, res, next) => {
   });
 });
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
