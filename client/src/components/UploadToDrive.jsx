@@ -15,10 +15,14 @@ function UploadToDrive() {
   useEffect(() => {
     const urlParams = new URLSearchParams(pathname.search);
     const driveLinked = urlParams.get("driveLinked");
+    console.log(driveLinked);
 
     if (driveLinked === "true") {
       const savedTitle = localStorage.getItem("draftTitle");
       const savedContent = localStorage.getItem("draftContent");
+
+      console.log(savedContent);
+      console.log(savedTitle);
 
       if (savedTitle && savedContent) {
         uploadToDrive(savedTitle, savedContent);
