@@ -7,8 +7,8 @@ import { clearDraft } from "../store/store";
 function UploadToDrive() {
   const pathname = useLocation();
   const dispatch = useDispatch();
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const { title, content } = useSelector((state) => state.draft);
@@ -18,19 +18,21 @@ function UploadToDrive() {
   useEffect(() => {
     const urlParams = new URLSearchParams(pathname.search);
     const driveLinked = urlParams.get("driveLinked");
-    console.log(driveLinked);
+    // console.log(driveLinked);
 
     if (driveLinked === "true") {
       if (title && content) {
-        uploadToDrive(content, title);
+        uploadToDrive(title, content);
         dispatch(clearDraft());
       }
     }
-  }, [currentUser?._id]);
+  }, []);
 
   const uploadToDrive = async (savedTitle, savedContent) => {
-    console.log(savedContent);
-    console.log(savedTitle);
+    // console.log(savedContent);
+    // console.log(savedTitle);
+    setError(null);
+    setSuccessMessage(null);
     try {
       setLoading(true);
       const res = await fetch(

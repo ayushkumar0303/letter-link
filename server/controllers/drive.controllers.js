@@ -3,6 +3,9 @@ import { google } from "googleapis";
 import jwt from "jsonwebtoken";
 import HtmlToDocx from "html-to-docx";
 import fs from "fs";
+import path from "path";
+
+const __dirname = path.resolve();
 
 export const driveConnect = async (req, res, next) => {
   const authUrl = oauth2Client.generateAuthUrl({
@@ -78,8 +81,12 @@ export const getDriveLetters = async (req, res, next) => {
 
 export const driveUpload = async (req, res, next) => {
   try {
-    const filePath = "./docsHtml.docs";
+    const filePath = path.resolve(__dirname, "docsHtml.docs");
     const { title, content } = req.body;
+
+    if (!title || !content) {
+      return next(errorHandler(404, "Missing letter title or content!"));
+    }
 
     const userId = req.params.userId;
 
@@ -105,19 +112,20 @@ export const driveUpload = async (req, res, next) => {
     const drive = google.drive({ version: "v3", auth: oauth2Client });
 
     const folderId = await getOrCreateFolder(drive);
+    console.log(title);
 
     // Define file metadata with the folder ID
     const fileMetadata = {
       name: `${title || "New Letter"}.docx`,
       mimeType:
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      parents: [folderId], // Upload inside "Letters" folder
+      parents: [folderId],
     };
 
     const media = {
       mimeType:
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      body: fs.createReadStream(filePath), // Letter content
+      body: fs.createReadStream(filePath),
     };
 
     const response = await drive.files.create({
@@ -126,8 +134,13 @@ export const driveUpload = async (req, res, next) => {
       fields: "id, webViewLink",
     });
 
-    fs.unlinkSync(filePath);
-    // console.log(response.status);
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (error) {
+      next(error);
+    }
     if (response?.statusText === "OK") {
       return res
         .status(200)
@@ -141,18 +154,15 @@ export const driveUpload = async (req, res, next) => {
 async function getOrCreateFolder(drive) {
   const folderName = "Letters";
 
-  // Step 1: Search for the existing "Letters" folder
   const response = await drive.files.list({
     q: `mimeType='application/vnd.google-apps.folder' and name='${folderName}' and trashed=false`,
     fields: "files(id, name)",
   });
 
   if (response.data.files.length > 0) {
-    // Folder already exists, return its ID
     return response.data.files[0].id;
   }
 
-  // Step 2: Create the folder if it does not exist
   const fileMetadata = {
     name: folderName,
     mimeType: "application/vnd.google-apps.folder",
@@ -163,5 +173,5 @@ async function getOrCreateFolder(drive) {
     fields: "id",
   });
 
-  return folder.data.id; // Return the newly created folder ID
+  return folder.data.id;
 }
