@@ -20,6 +20,9 @@ export const driveConnect = async (req, res, next) => {
 
 export const driveCallback = async (req, res, next) => {
   const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
+
+  console.log(frontendURL);
+
   const { code } = req.query;
   if (!code) return res.status(400).json({ message: "Missing parameters" });
 
