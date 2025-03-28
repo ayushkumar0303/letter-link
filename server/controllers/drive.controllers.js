@@ -19,7 +19,7 @@ export const driveConnect = async (req, res, next) => {
 };
 
 export const driveCallback = async (req, res, next) => {
-  const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
+  const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
   console.log(frontendURL);
 
@@ -34,7 +34,7 @@ export const driveCallback = async (req, res, next) => {
     .cookie("auth_token", authToken, {
       httpOnly: true,
     })
-    .redirect(`${frontendURL}/dashboard/uploading-letter/?driveLinked=true`);
+    .redirect(`${FRONTEND_URL}/dashboard/uploading-letter/?driveLinked=true`);
 };
 
 export const getDriveLetters = async (req, res, next) => {
