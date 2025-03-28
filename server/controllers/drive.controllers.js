@@ -21,7 +21,7 @@ export const driveConnect = async (req, res, next) => {
 export const driveCallback = async (req, res, next) => {
   const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
 
-  // console.log(frontendURL);
+  console.log(frontendURL);
 
   const { code } = req.query;
   if (!code) return res.status(400).json({ message: "Missing parameters" });
@@ -46,7 +46,7 @@ export const getDriveLetters = async (req, res, next) => {
     const authToken = req.cookies.auth_token;
 
     if (!authToken) {
-      return res.status(401).json("Unauthorised User");
+      return res.status(401).json("Invalid Token");
     }
 
     jwt.verify(authToken, process.env.SECRET_KEY, (err, token) => {
@@ -95,7 +95,7 @@ export const driveUpload = async (req, res, next) => {
     const authToken = req.cookies.auth_token;
 
     if (!authToken) {
-      return res.status(401).json("Unauthorised User");
+      return res.status(401).json("Invalid Token");
     }
 
     jwt.verify(authToken, process.env.SECRET_KEY, (err, token) => {

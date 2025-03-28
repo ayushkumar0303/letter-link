@@ -80,7 +80,6 @@ function UploadToDrive() {
 
         <div className="flex justify-center">
           <Button
-            color="dark"
             size="sm"
             onClick={() => navigate("/")}
             className="mt-4"
