@@ -13,6 +13,8 @@ const app = express();
 
 dotenv.config();
 
+const port = process.env.PORT || 3000;
+
 // app.use(
 //   cors({
 //     // origin: "http://localhost:5173", // Replace with your front-end URL
@@ -36,8 +38,9 @@ mongoose
   });
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
-app.listen(3000, (req, res) => {
-  console.log("Server is running on port 3000");
+
+app.listen(port, (req, res) => {
+  console.log(`Server is running on port 3000 ${port}`);
 });
 
 app.use("/server/auth", authRouter);

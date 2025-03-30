@@ -81,6 +81,7 @@ function UploadToDrive() {
         <div className="flex justify-center">
           <Button
             size="sm"
+            color="dark"
             onClick={() => navigate("/")}
             className="mt-4"
             disabled={loading}
