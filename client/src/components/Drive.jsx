@@ -2,9 +2,11 @@ import { Spinner, Table } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { driveConnected } from "../store/store";
 
 function Drive() {
   const { currentUser } = useSelector((state) => state.user);
+  const { driveConnected } = useSelector((state) => state.drive);
   const [loading, setLoading] = useState(false);
   const [userLetters, setUserLetters] = useState([]);
   const [error, setError] = useState("");
@@ -14,6 +16,7 @@ function Drive() {
     const getLettersFromDrive = async () => {
       try {
         setLoading(true);
+        // setSeeMore(true);
 
         // console.log("drive");
         const res = await fetch(
@@ -105,14 +108,14 @@ function Drive() {
                   colSpan="7"
                   className="text-center text-gray-500 py-4"
                 >
-                  No letters in Drive
+                  No letters in Drive (or App is not connected with drive)
                 </Table.Cell>
               </Table.Row>
             )}
           </Table.Body>
         </Table>
       </div>
-      {seeMore && (
+      {driveConnected && seeMore && (
         <p
           className="text-center text-green-500 cursor-pointer "
           onClick={handleSeeMore}

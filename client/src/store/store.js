@@ -23,6 +23,16 @@ const draftSlice = createSlice({
   },
 });
 
+const driveSlice = createSlice({
+  name: "drive",
+  initialState: { isConected: false },
+  reducers: {
+    driveConnected: (state, action) => {
+      state.isConected = action.payload.isConected;
+    },
+  },
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState: USER_INITIAL_STATE,
@@ -53,6 +63,7 @@ export const userSlice = createSlice({
 const rootReducer = combineReducers({
   user: userSlice.reducer,
   draft: draftSlice.reducer,
+  drive: driveSlice.reducer,
 });
 
 const persistConfig = {
@@ -73,4 +84,5 @@ export const { signOutSuccess, signInError, signInStart, signInSuccess } =
   userSlice.actions;
 
 export const { setDraft, clearDraft } = draftSlice.actions;
+export const { driveConnected } = driveSlice.actions;
 export const persistor = persistStore(store);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Alert, Button, Spinner } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { clearDraft } from "../store/store";
+import { clearDraft, driveConnected } from "../store/store";
 
 function UploadToDrive() {
   const pathname = useLocation();
@@ -23,6 +23,7 @@ function UploadToDrive() {
     if (driveLinked === "true") {
       if (title && content) {
         uploadToDrive(title, content);
+        dispatch(driveConnected({ isConnected: driveConnected }));
         dispatch(clearDraft());
       }
     }
